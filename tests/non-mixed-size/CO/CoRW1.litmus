@@ -1,0 +1,17 @@
+X86_64 CoRW1
+"PosRW Rfe"
+Cycle=Rfe PosRW
+Relax=
+Safe=Rfe PosRW
+Generator=diy7 (version 7.55+01(dev))
+Com=Rf
+Orig=PosRW Rfe
+Align=
+{
+uint64_t x; uint64_t 0:rax;
+
+}
+ P0            ;
+ movq (x),%rax ;
+ movq $1,(x)   ;
+exists (not (0:rax=0 /\ x=1))

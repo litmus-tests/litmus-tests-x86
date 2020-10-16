@@ -1,0 +1,17 @@
+X86_64 CoWR0
+"PosWR Fre"
+Cycle=Fre PosWR
+Relax=
+Safe=Fre PosWR
+Generator=diy7 (version 7.55+01(dev))
+Com=Fr
+Orig=PosWR Fre
+Align=
+{
+uint64_t x; uint64_t 0:rax;
+
+}
+ P0            ;
+ movq $1,(x)   ;
+ movq (x),%rax ;
+exists (not (0:rax=1 /\ x=1))

@@ -1,0 +1,17 @@
+X86_64 CoRW2
+"Rfe PosRW Coe"
+Cycle=Rfe PosRW Coe
+Relax=
+Safe=Rfe Coe PosRW
+Generator=diy7 (version 7.55+01(dev))
+Com=Rf Co
+Orig=Rfe PosRW Coe
+Align=
+{
+uint64_t x; uint64_t 1:rax;
+
+}
+ P0          | P1            ;
+ movq $1,(x) | movq (x),%rax ;
+             | movq $2,(x)   ;
+exists (not (1:rax=0 /\ (x=2 \/ x=1) \/ 1:rax=1 /\ x=2))

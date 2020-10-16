@@ -1,0 +1,19 @@
+X86_64 Z6.2+po+mfences+mfence
+"PodWW Rfe MFencesRW Rfe MFencedRW Coe"
+Cycle=Rfe MFencesRW Rfe MFencedRW Coe PodWW
+Relax=
+Safe=Rfe Coe PodWW MFencesRW MFencedRW
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=W,2:y=F,2:x=W
+Com=Rf Rf Co
+Orig=PodWW Rfe MFencesRW Rfe MFencedRW Coe
+Align=
+{
+uint64_t y; uint64_t x; uint64_t 2:rax; uint64_t 1:rax;
+
+}
+ P0          | P1            | P2            ;
+ movq $2,(x) | movq (y),%rax | movq (y),%rax ;
+ movq $1,(y) | mfence        | mfence        ;
+             | movq $2,(y)   | movq $1,(x)   ;
+exists (x=2 /\ y=2 /\ 1:rax=1 /\ 2:rax=2)

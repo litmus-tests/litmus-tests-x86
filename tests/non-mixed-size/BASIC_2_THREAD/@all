@@ -1,0 +1,23 @@
+# diy7 -arch X86_64 -num false -mode critical -type uint64_t -safe Pod**,Fre,Rfe,Wse,MFenced** -nprocs 2 -eprocs -size 4 -o tests/non-mixed-size/BASIC_2_THREAD/
+# Version 7.55+01(dev), Revision: 5dbf7cfd9aa1a6f631f7cec799622de7256e6a10
+MP.litmus
+MP+po+mfence.litmus
+S.litmus
+S+po+mfence.litmus
+LB.litmus
+LB+mfence+po.litmus
+MP+mfence+po.litmus
+MP+mfences.litmus
+S+mfence+po.litmus
+S+mfences.litmus
+LB+mfences.litmus
+SB.litmus
+SB+mfence+po.litmus
+R.litmus
+R+mfence+po.litmus
+SB+mfences.litmus
+R+po+mfence.litmus
+R+mfences.litmus
+2+2W.litmus
+2+2W+mfence+po.litmus
+2+2W+mfences.litmus

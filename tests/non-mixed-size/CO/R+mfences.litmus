@@ -1,0 +1,19 @@
+X86_64 R+mfences
+"MFencedWW Coe MFencedWR Fre"
+Cycle=Fre MFencedWW Coe MFencedWR
+Relax=
+Safe=Fre Coe MFencedWW MFencedWR
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=W,1:y=F,1:x=T
+Com=Co Fr
+Orig=MFencedWW Coe MFencedWR Fre
+Align=
+{
+uint64_t y; uint64_t x; uint64_t 1:rax;
+
+}
+ P0          | P1            ;
+ movq $1,(x) | movq $2,(y)   ;
+ mfence      | mfence        ;
+ movq $1,(y) | movq (x),%rax ;
+exists (not (x=1 /\ (1:rax=0 /\ (y=1 \/ y=2) \/ 1:rax=1 /\ (y=2 \/ y=1))))

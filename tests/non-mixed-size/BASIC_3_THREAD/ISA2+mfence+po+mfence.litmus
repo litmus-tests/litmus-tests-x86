@@ -1,0 +1,19 @@
+X86_64 ISA2+mfence+po+mfence
+"MFencedWW Rfe PodRW Rfe MFencedRR Fre"
+Cycle=Rfe PodRW Rfe MFencedRR Fre MFencedWW
+Relax=
+Safe=Rfe Fre PodRW MFencedWW MFencedRR
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=W,1:y=F,1:z=W,2:z=F,2:x=T
+Com=Rf Rf Fr
+Orig=MFencedWW Rfe PodRW Rfe MFencedRR Fre
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t 2:rbx; uint64_t 2:rax; uint64_t 1:rax;
+
+}
+ P0          | P1            | P2            ;
+ movq $1,(x) | movq (y),%rax | movq (z),%rax ;
+ mfence      | movq $1,(z)   | mfence        ;
+ movq $1,(y) |               | movq (x),%rbx ;
+exists (1:rax=1 /\ 2:rax=1 /\ 2:rbx=0)

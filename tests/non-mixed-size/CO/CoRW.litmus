@@ -1,0 +1,15 @@
+X86_64 CoRW
+"PosRW Coe Rfe"
+Generator=diyone7 (version 7.55+01(dev))
+Com=Co Rf
+Orig=PosRW Coe Rfe
+Align=
+{
+uint64_t x; uint64_t 0:rax;
+
+}
+ P0            | P1          ;
+ movq (x),%rax | movq $2,(x) ;
+ movq $1,(x)   |             ;
+forall
+((x=2 /\ 0:rax=0) \/ (x=1 /\ (0:rax=2 \/ 0:rax=0)))

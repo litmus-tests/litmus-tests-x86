@@ -1,0 +1,19 @@
+X86_64 WW+RR+WW+WR+mfences+po+mfence+po
+"MFencesWW Rfe PodRR Fre MFencedWW Coe PodWR Fre"
+Cycle=Rfe PodRR Fre MFencedWW Coe PodWR Fre MFencesWW
+Relax=
+Safe=Rfe Fre Coe PodWR PodRR MFencesWW MFencedWW
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=1:x=F,1:y=T,2:y=F,2:z=W,3:z=F,3:x=T
+Com=Rf Fr Co Fr
+Orig=MFencesWW Rfe PodRR Fre MFencedWW Coe PodWR Fre
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t 3:rax; uint64_t 1:rbx; uint64_t 1:rax;
+
+}
+ P0          | P1            | P2          | P3            ;
+ movq $1,(x) | movq (x),%rax | movq $1,(y) | movq $2,(z)   ;
+ mfence      | movq (y),%rbx | mfence      | movq (x),%rax ;
+ movq $2,(x) |               | movq $1,(z) |               ;
+exists (x=2 /\ z=2 /\ 1:rax=2 /\ 1:rbx=0 /\ 3:rax=0)

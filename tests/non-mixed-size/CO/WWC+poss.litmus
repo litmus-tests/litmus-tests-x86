@@ -1,0 +1,17 @@
+X86_64 WWC+poss
+"Rfe PosRW Rfe PosRW Coe"
+Cycle=Rfe PosRW Rfe PosRW Coe
+Relax=
+Safe=Rfe Coe PosRW
+Generator=diy7 (version 7.55+01(dev))
+Com=Rf Rf Co
+Orig=Rfe PosRW Rfe PosRW Coe
+Align=
+{
+uint64_t x; uint64_t 2:rax; uint64_t 1:rax;
+
+}
+ P0          | P1            | P2            ;
+ movq $1,(x) | movq (x),%rax | movq (x),%rax ;
+             | movq $2,(x)   | movq $3,(x)   ;
+exists (not (1:rax=0 /\ (2:rax=0 /\ (x=1 \/ x=2 \/ x=3) \/ 2:rax=1 /\ (x=3 \/ x=2) \/ 2:rax=2 /\ (x=1 \/ x=3)) \/ 1:rax=1 /\ (x=3 /\ (2:rax=2 \/ 2:rax=1 \/ 2:rax=0) \/ x=2 /\ (2:rax=0 \/ 2:rax=1)) \/ 1:rax=3 /\ (2:rax=0 /\ (x=1 \/ x=2) \/ 2:rax=1 /\ x=2)))

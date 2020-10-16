@@ -1,0 +1,2 @@
+# diy7 -arch X86_64 -num false -mode critical -type uint64_t -safe Pod**,Pos**,Fre,Rfe,Wse,MFenced**,MFences** -nprocs 2 -eprocs -size 8 -no tests/non-mixed-size/BASIC_2_THREAD_EXTRA//exclude_cycles.tmp -o tests/non-mixed-size/BASIC_2_THREAD_EXTRA/
+# Version 7.55+01(dev), Revision: 5dbf7cfd9aa1a6f631f7cec799622de7256e6a10

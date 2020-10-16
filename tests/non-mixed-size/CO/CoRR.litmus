@@ -1,0 +1,17 @@
+X86_64 CoRR
+"Rfe PosRR Fre"
+Cycle=Rfe PosRR Fre
+Relax=
+Safe=Rfe Fre PosRR
+Generator=diy7 (version 7.55+01(dev))
+Com=Rf Fr
+Orig=Rfe PosRR Fre
+Align=
+{
+uint64_t x; uint64_t 1:rbx; uint64_t 1:rax;
+
+}
+ P0          | P1            ;
+ movq $1,(x) | movq (x),%rax ;
+             | movq (x),%rbx ;
+exists (not (x=1 /\ (1:rax=0 /\ (1:rbx=0 \/ 1:rbx=1) \/ 1:rax=1 /\ 1:rbx=1)))

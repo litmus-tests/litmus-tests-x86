@@ -1,0 +1,17 @@
+X86_64 CoWW
+"PosWW Coe"
+Cycle=Coe PosWW
+Relax=
+Safe=Coe PosWW
+Generator=diy7 (version 7.55+01(dev))
+Com=Co
+Orig=PosWW Coe
+Align=
+{
+uint64_t x;
+
+}
+ P0          ;
+ movq $1,(x) ;
+ movq $2,(x) ;
+exists (not (x=2))
