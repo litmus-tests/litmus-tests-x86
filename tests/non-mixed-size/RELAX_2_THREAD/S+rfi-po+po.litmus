@@ -1,0 +1,19 @@
+X86_64 S+rfi-po+po
+"Rfi PodRW Rfe PodRW Coe"
+Cycle=Rfi PodRW Rfe PodRW Coe
+Relax=Rfi
+Safe=Rfe Coe PodRW
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=W,1:y=F,1:x=W
+Com=Rf Co
+Orig=Rfi PodRW Rfe PodRW Coe
+Align=
+{
+uint64_t y; uint64_t x; uint64_t 1:rax; uint64_t 0:rax;
+
+}
+ P0            | P1            ;
+ movq $2,(x)   | movq (y),%rax ;
+ movq (x),%rax | movq $1,(x)   ;
+ movq $1,(y)   |               ;
+exists (x=2 /\ 0:rax=2 /\ 1:rax=1)

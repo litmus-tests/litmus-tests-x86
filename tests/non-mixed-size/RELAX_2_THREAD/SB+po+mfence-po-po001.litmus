@@ -1,0 +1,21 @@
+X86_64 SB+po+mfence-po-po001
+"PodWR Fre MFencedWR PodRW PodWR Fre"
+Cycle=Fre PodWR Fre MFencedWR PodRW PodWR
+Relax=PodWR
+Safe=Fre PodRW MFencedWR
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=T,1:y=F,1:x=T
+Com=Fr Fr
+Orig=PodWR Fre MFencedWR PodRW PodWR Fre
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t a; uint64_t 1:rbx; uint64_t 0:rax;
+
+}
+ P0            | P1            ;
+ movq $1,(x)   | movq $1,(y)   ;
+ movq (y),%rax | mfence        ;
+               | movq (z),%rax ;
+               | movq $1,(a)   ;
+               | movq (x),%rbx ;
+exists (0:rax=0 /\ 1:rbx=0)

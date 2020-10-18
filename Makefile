@@ -1,45 +1,35 @@
-gen-tests: gen-basic-tests gen-extra-tests tests/non-mixed-size/CO/@all
+gen-tests:
 	$(MAKE) tests/non-mixed-size/@all
 .PHONY: gen-tests
 
-tests/non-mixed-size/@all:
+tests/non-mixed-size/@all: $(wildcard tests/non-mixed-size/*/@all)
 	cd $(dir $@) && ls -1 */@all > $(notdir $@)
 
 ### Basic tests ###############################################################
 
-tests/non-mixed-size/BASIC_2_THREAD/@all: SIZE = 4
-tests/non-mixed-size/BASIC_3_THREAD/@all: SIZE = 6
-tests/non-mixed-size/BASIC_4_THREAD/@all: SIZE = 8
+gen-tests: $(foreach n,2 3 4,tests/non-mixed-size/BASIC_$n_THREAD/@all)
+
 tests/non-mixed-size/BASIC_%_THREAD/@all: basic.conf
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
-	diy7 -conf $< -nprocs $* -eprocs -size $(SIZE) -o $(dir $@)
-
-gen-basic-tests: tests/non-mixed-size/BASIC_2_THREAD/@all
-gen-basic-tests: tests/non-mixed-size/BASIC_3_THREAD/@all
-gen-basic-tests: tests/non-mixed-size/BASIC_4_THREAD/@all
-.PHONY: gen-basic-tests
+	diy7 -conf $< -nprocs $* -eprocs -size $$((2 * $*)) -o $(dir $@)
 
 ### Extra tests ###############################################################
 
-tests/non-mixed-size/BASIC_2_THREAD_EXTRA/@all: SIZE = 8
-tests/non-mixed-size/BASIC_3_THREAD_EXTRA/@all: SIZE = 12
-tests/non-mixed-size/BASIC_4_THREAD_EXTRA/@all: SIZE = 16
+gen-tests: $(foreach n,2 3 4,tests/non-mixed-size/BASIC_$n_THREAD_EXTRA/@all)
+
 # Generate basic tests first, so we can exclude them from extra
 tests/non-mixed-size/BASIC_%_THREAD_EXTRA/@all: extra.conf tests/non-mixed-size/BASIC_%_THREAD/@all
 	rm -rf $(dir $@)
 	mkdir -p $(dir $@)
 # extract the cycles of basic tests, and pass them to diy so it doesn't generate them again
 	mcycles7 $(word 2,$^) | sed 's/.*: //' > $(dir $@)/exclude_cycles.tmp
-	diy7 -conf $< -nprocs $* -eprocs -size $(SIZE) -no $(dir $@)/exclude_cycles.tmp -o $(dir $@)
+	diy7 -conf $< -nprocs $* -eprocs -size $$((4 * $*)) -no $(dir $@)/exclude_cycles.tmp -o $(dir $@)
 	rm -f $(dir $@)/exclude_cycles.tmp
 
-gen-extra-tests: tests/non-mixed-size/BASIC_2_THREAD_EXTRA/@all
-gen-extra-tests: tests/non-mixed-size/BASIC_3_THREAD_EXTRA/@all
-gen-extra-tests: tests/non-mixed-size/BASIC_4_THREAD_EXTRA/@all
-.PHONY: gen-extra-tests
-
 ### Coherence tests ###########################################################
+
+gen-tests: tests/non-mixed-size/CO/@all
 
 tests/non-mixed-size/CO/@all:
 	rm -rf $(dir $@) $(dir $@)_temp
@@ -65,3 +55,15 @@ tests/non-mixed-size/CO/@all:
 	diyone7 -arch X86_64 -type uint64_t -cond unicond -name CoWR PosWR Fre Wse
 	mv CoWR.litmus $(dir $@)
 	echo "CoWR.litmus" >> $@
+
+### Relax tests ###############################################################
+
+gen-tests: $(foreach n,2 3,tests/non-mixed-size/RELAX_$n_THREAD/@all)
+
+tests/non-mixed-size/RELAX_2_THREAD/@all: MODE = ppo
+tests/non-mixed-size/RELAX_3_THREAD/@all: MODE = sc
+# tests/non-mixed-size/RELAX_4_THREAD/@all: MODE = sc
+tests/non-mixed-size/RELAX_%_THREAD/@all: relax.conf
+	rm -rf $(dir $@)
+	mkdir -p $(dir $@)
+	diy7 -conf $< -nprocs $* -eprocs -size $$((3 * $*)) -mode $(MODE) -o $(dir $@)

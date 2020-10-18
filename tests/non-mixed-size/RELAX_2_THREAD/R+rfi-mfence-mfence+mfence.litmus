@@ -1,0 +1,22 @@
+X86_64 R+rfi-mfence-mfence+mfence
+"Rfi MFencedRW MFencedWW Coe MFencedWR Fre"
+Cycle=Rfi MFencedRW MFencedWW Coe MFencedWR Fre
+Relax=Rfi
+Safe=Fre Coe MFencedWW MFencedWR MFencedRW
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:z=W,1:z=F,1:x=T
+Com=Co Fr
+Orig=Rfi MFencedRW MFencedWW Coe MFencedWR Fre
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t 1:rax; uint64_t 0:rax;
+
+}
+ P0            | P1            ;
+ movq $1,(x)   | movq $2,(z)   ;
+ movq (x),%rax | mfence        ;
+ mfence        | movq (x),%rax ;
+ movq $1,(y)   |               ;
+ mfence        |               ;
+ movq $1,(z)   |               ;
+exists (z=2 /\ 0:rax=1 /\ 1:rax=0)

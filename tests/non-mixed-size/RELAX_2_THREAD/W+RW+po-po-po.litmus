@@ -1,0 +1,19 @@
+X86_64 W+RW+po-po-po
+"Rfe PodRW PodWR PodRW Coe"
+Cycle=Rfe PodRW PodWR PodRW Coe
+Relax=PodWR
+Safe=Rfe Coe PodRW
+Generator=diy7 (version 7.55+01(dev))
+Com=Rf Co
+Orig=Rfe PodRW PodWR PodRW Coe
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t 1:rax;
+
+}
+ P0          | P1            ;
+ movq $2,(x) | movq (x),%rax ;
+             | movq $1,(y)   ;
+             | movq (z),%rbx ;
+             | movq $1,(x)   ;
+exists (x=2 /\ 1:rax=2)

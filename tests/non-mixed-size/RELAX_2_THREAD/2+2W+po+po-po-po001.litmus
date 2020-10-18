@@ -1,0 +1,20 @@
+X86_64 2+2W+po+po-po-po001
+"PodWW Coe PodWR PodRR PodRW Coe"
+Cycle=Coe PodWW Coe PodWR PodRR PodRW
+Relax=PodWR
+Safe=Coe PodWW PodRW PodRR
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=W,1:y=F,1:x=W
+Com=Co Co
+Orig=PodWW Coe PodWR PodRR PodRW Coe
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t a;
+
+}
+ P0          | P1            ;
+ movq $2,(x) | movq $2,(y)   ;
+ movq $1,(y) | movq (z),%rax ;
+             | movq (a),%rbx ;
+             | movq $1,(x)   ;
+exists (x=2 /\ y=2)

@@ -1,0 +1,18 @@
+X86_64 RWC
+"Rfe PodRR Fre PodWR Fre"
+Cycle=Rfe PodRR Fre PodWR Fre
+Relax=PodWR
+Safe=Rfe Fre PodRR
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=1:x=F,1:y=T,2:y=F,2:x=T
+Com=Rf Fr Fr
+Orig=Rfe PodRR Fre PodWR Fre
+Align=
+{
+uint64_t y; uint64_t x; uint64_t 2:rax; uint64_t 1:rbx; uint64_t 1:rax;
+
+}
+ P0          | P1            | P2            ;
+ movq $1,(x) | movq (x),%rax | movq $1,(y)   ;
+             | movq (y),%rbx | movq (x),%rax ;
+exists (1:rax=1 /\ 1:rbx=0 /\ 2:rax=0)

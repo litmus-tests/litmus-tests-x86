@@ -1,0 +1,21 @@
+X86_64 MP+po+mfence-po-rfi001
+"PodWW Rfe MFencedRR PodRW Rfi Fre"
+Cycle=Rfi Fre PodWW Rfe MFencedRR PodRW
+Relax=Rfi
+Safe=Rfe Fre PodWW PodRW MFencedRR
+Generator=diy7 (version 7.55+01(dev))
+Prefetch=0:x=F,0:y=W,1:y=F,1:x=T
+Com=Rf Fr
+Orig=PodWW Rfe MFencedRR PodRW Rfi Fre
+Align=
+{
+uint64_t z; uint64_t y; uint64_t x; uint64_t 1:rcx; uint64_t 1:rax;
+
+}
+ P0          | P1            ;
+ movq $2,(x) | movq (y),%rax ;
+ movq $1,(y) | mfence        ;
+             | movq (z),%rbx ;
+             | movq $1,(x)   ;
+             | movq (x),%rcx ;
+exists (x=2 /\ 1:rax=1 /\ 1:rcx=1)
