@@ -1,7 +1,8 @@
 # litmus-tests-x86
 
 This litmus-tests-x86 repository contains a modest set of litmus tests
-for the x86.
+for x86, principally for those learning about relaxed-memory concurrency.
+It only exercises some of the basics: loads, stores, and mfences. 
 
 These litmus tests have been automatically generated using the
 diy7 and diyone test generators from the diy tool suite <http://diy.inria.fr>.
