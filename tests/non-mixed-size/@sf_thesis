@@ -1,0 +1,12 @@
+BASIC_2_THREAD/LB.litmus
+BASIC_2_THREAD/MP.litmus
+BASIC_2_THREAD/MP+mfence+po.litmus
+BASIC_2_THREAD/MP+po+mfence.litmus
+BASIC_2_THREAD/SB+mfences.litmus
+CO/CoRR.litmus
+CO/CoRW1.litmus
+CO/CoRW2.litmus
+CO/CoWR0.litmus
+CO/CoWR.litmus
+CO/CoWW.litmus
+RELAX_2_THREAD/SB.litmus
